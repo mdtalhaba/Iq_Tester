@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section style="background-color: #EEF5FF" class="w-75 m-auto rounded-4 shadow p-5 my-5">
+    <div>
+        <h3 class="text-center">{{ quiz.title }}</h3>
+        <span>{{quiz.questions.all|length}}</span>
+        {% for question in quiz.questions.all %}
+        <div class="bg-light w-75 m-auto p-5 my-5 border border-dark-subtle rounded-4">
+            <h5>{{question.text}}</h5>
+            <div class="p-4">
+                {% for choice in question.choice.all %}
+                   <div class="bg-secondary-subtle p-3 m-3 rounded-2">
+                        <h6>{{ choice.option }}</h6>
+                   </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<div style="width: 500px; min-height: 500px; margin: auto" class="py-5">
+    <h3>{{type}}</h3>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <!--{{ form | crispy }}-->
+      {% for fm in form %}
+       <div>
+        {{fm.label_tag}}
+        {{fm}}
+        <p>{{fm.errors | striptags }}</p>
+       </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-dark mt-2">Submit</button>
+    </form>
+  </div>
+
+{% endblock body %}
