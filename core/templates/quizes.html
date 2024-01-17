@@ -1,13 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
 
-<div>
-    <div>
-        <img class="w-100" src="{% static "./images/banner.jpg" %}" alt="">
-    </div>
-</div>
 <section class="container mt-5">
     <div class="row">
         <div class="dropdown col-2 mt-3">
@@ -16,7 +10,7 @@
             </button>
             <ul style="max-height:400px; overflow-y: scroll;" class="dropdown-menu dropdown-menu-dark">
               {% for cate in category %}
-                <li><a class="dropdown-item" href="{% url "category_slug_home" cate.slug %}">{{cate.name}}</a></li>
+                <li><a class="dropdown-item" href="{% url "category_slug_quizes" cate.slug %}">{{cate.name}}</a></li>
               {% endfor %}
             </ul>
         </div>

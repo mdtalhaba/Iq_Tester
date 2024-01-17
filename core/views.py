@@ -10,7 +10,8 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
-from quiz.models import Quiz, Category
+from quiz.models import Quiz, Category, Question
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def home(req, category_slug = None) :
     data = Quiz.objects.all()
@@ -22,10 +23,38 @@ def home(req, category_slug = None) :
     return render(req, 'index.html', {'data' : data, 'category' : category})
 
 
-def quizes(req, quiz_id) :
-    quiz = Quiz.objects.get(id=quiz_id)
+def quizes(req, category_slug = None) :
+    data = Quiz.objects.all()
+    if category_slug is not None :
+        cate = Category.objects.get(slug=category_slug)
+        data = Quiz.objects.filter(category=cate)
+    
+    category = Category.objects.all()
+    return render(req, 'quizes.html', {'data' : data, 'category' : category})
 
-    return render(req, 'quiz.html', {'quiz' : quiz})
+
+def quiz_page(request, quiz_id):
+    queryset = Question.objects.filter(quiz=quiz_id)
+    quiz = Quiz.objects.get(id=quiz_id)
+    qn_id = queryset.first().id
+
+    items_per_page = 1
+    paginator = Paginator(queryset, items_per_page)
+
+    page = request.GET.get('page')
+    print(page)
+    try:
+        current_page = paginator.page(page)
+        print(current_page.number)
+    except PageNotAnInteger:
+        current_page = paginator.page(1)
+    except EmptyPage:
+        current_page = paginator.page(paginator.num_pages)
+    qn_id += current_page.number-1 
+    question = Question.objects.get(id=qn_id)
+
+    return render(request, 'quiz_page.html', {'current_page': current_page, 'question' : question, 'quiz': quiz})
+
 
 
 class RegistrationView(CreateView):
