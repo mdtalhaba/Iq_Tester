@@ -12,6 +12,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from quiz.models import Quiz, Category, Question
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
 
 def home(req, category_slug = None) :
     data = Quiz.objects.all()
@@ -32,7 +33,7 @@ def quizes(req, category_slug = None) :
     category = Category.objects.all()
     return render(req, 'quizes.html', {'data' : data, 'category' : category})
 
-
+@login_required(login_url="/login/")
 def quiz_page(request, quiz_id):
     queryset = Question.objects.filter(quiz=quiz_id)
     quiz = Quiz.objects.get(id=quiz_id)
@@ -42,7 +43,9 @@ def quiz_page(request, quiz_id):
     paginator = Paginator(queryset, items_per_page)
 
     page = request.GET.get('page')
+    ansid = request.GET.get('ansid')
     print(page)
+    print(ansid)
     try:
         current_page = paginator.page(page)
         print(current_page.number)
@@ -52,6 +55,7 @@ def quiz_page(request, quiz_id):
         current_page = paginator.page(paginator.num_pages)
     qn_id += current_page.number-1 
     question = Question.objects.get(id=qn_id)
+    print(question)
 
     return render(request, 'quiz_page.html', {'current_page': current_page, 'question' : question, 'quiz': quiz})
 
@@ -80,7 +84,7 @@ class RegistrationView(CreateView):
         send_email.send()
         return super().form_valid(form)
     
-
+@login_required(login_url="/login/")
 def update_profile(req) :
     if req.method == 'POST' :
         form = UserUpdateForm(req.POST, instance=req.user)
@@ -104,7 +108,7 @@ def activate(request, uid64, token):
     if user is not None :
         user.is_active = True
         user.save()
-        return redirect('register')
+        return redirect('login')
     else:
         return redirect('register')
 
