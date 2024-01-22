@@ -9,13 +9,29 @@
         <div class="bg-light w-75 m-auto p-5 my-5 border border-dark-subtle rounded-4">
             <h5>{{question.text}}</h5>
             <div class="p-4">
-                <div>
-                    {% for choice  in question.choice.all%}
-                    <div>
-                        <p class="btn btn-light border rounder w-100 py-2">{{ choice.option }}</p>
-                    </div>
-                    {% endfor %}
-                </div>
+                <form method='post'>
+                    {% csrf_token %}
+                    <div class="form-check ps-0">
+                       {% for choice in question.choice.all %}
+                       <div class="form-check ps-0">
+                            
+                            <label class="form-check-label border rounded w-100 p-2 my-2 ps-5 bg-secondary-subtle" for="gridRadios{{choice.id}}">
+                                <input class="form-check-input me-3" type="radio" name="{{question.text}}" id="gridRadios{{choice.id}}" value="{{choice.id}}" {% if ans != None and choice.id == ans.id %} checked {% endif %}>
+                                {{choice.option}}
+                            </label>
+                        </div>
+                       {% endfor %}
+                        <br>
+                    </div>    
+                    <input id='timer' type='hidden' name="timer" value="">
+                    {% if ans != None and ans.is_correct == True %}
+                    <h5 class="text-success">{{ans}} is Correct Answer</h5>
+                    {% elif ans != None and ans.is_correct == False %}
+                    <h5 class="text-danger">{{ans}} is Wrong Answer</h5>
+                    {% endif %}
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
                 {% comment %} Pagination {% endcomment %}
                 <div class="pagination justify-content-center mt-3">
                     <span class="step-links">

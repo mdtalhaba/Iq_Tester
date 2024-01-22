@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
-from quiz.models import Quiz, Category, Question
+from quiz.models import Quiz, Category, Question, Choice, UserResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 
@@ -51,8 +51,14 @@ def quiz_page(request, quiz_id):
         current_page = paginator.page(paginator.num_pages)
     qn_id += current_page.number-1 
     question = Question.objects.get(id=qn_id)
-
-    return render(request, 'quiz_page.html', {'current_page': current_page, 'question' : question, 'quiz': quiz})
+    ans = None
+    if request.method == 'POST' :
+        ansId = request.POST.get(question.text)
+        ansObj = Choice.objects.get(id=ansId)
+        ans = ansObj
+        UserResponse.objects.create(user=request.user, quiz=quiz, question=question, selected_choice=ansObj)
+    
+    return render(request, 'quiz_page.html', {'current_page': current_page, 'question' : question, 'quiz': quiz, 'ans': ans})
 
 
 
