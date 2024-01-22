@@ -19,7 +19,6 @@ def home(req, category_slug = None) :
     if category_slug is not None :
         cate = Category.objects.get(slug=category_slug)
         data = Quiz.objects.filter(category=cate)
-    
     category = Category.objects.all()
     return render(req, 'index.html', {'data' : data, 'category' : category})
 
@@ -43,9 +42,6 @@ def quiz_page(request, quiz_id):
     paginator = Paginator(queryset, items_per_page)
 
     page = request.GET.get('page')
-    ansid = request.GET.get('ansid')
-    print(page)
-    print(ansid)
     try:
         current_page = paginator.page(page)
         print(current_page.number)
@@ -55,7 +51,6 @@ def quiz_page(request, quiz_id):
         current_page = paginator.page(paginator.num_pages)
     qn_id += current_page.number-1 
     question = Question.objects.get(id=qn_id)
-    print(question)
 
     return render(request, 'quiz_page.html', {'current_page': current_page, 'question' : question, 'quiz': quiz})
 
@@ -63,7 +58,7 @@ def quiz_page(request, quiz_id):
 
 class RegistrationView(CreateView):
     model = User
-    template_name = 'registration.html'
+    template_name = 'register_login.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('register')
 
@@ -114,7 +109,7 @@ def activate(request, uid64, token):
 
 
 class UserLoginView(LoginView) :
-    template_name = './login.html'
+    template_name = 'register_login.html'
 
     def get_success_url(self) :
         return reverse_lazy('home')
