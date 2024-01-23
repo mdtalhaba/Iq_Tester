@@ -32,6 +32,12 @@ def quizes(req, category_slug = None) :
     category = Category.objects.all()
     return render(req, 'quizes.html', {'data' : data, 'category' : category})
 
+
+def quizHistory(req) :
+    data = UserResponse.objects.filter(user=req.user)
+    
+    return render(req, 'quiz_history.html', {'data' : data})
+
 @login_required(login_url="/login/")
 def quiz_page(request, quiz_id):
     queryset = Question.objects.filter(quiz=quiz_id)
@@ -54,9 +60,10 @@ def quiz_page(request, quiz_id):
     ans = None
     if request.method == 'POST' :
         ansId = request.POST.get(question.text)
-        ansObj = Choice.objects.get(id=ansId)
-        ans = ansObj
-        UserResponse.objects.create(user=request.user, quiz=quiz, question=question, selected_choice=ansObj)
+        if ansId is not None :
+            ansObj = Choice.objects.get(id=ansId)
+            ans = ansObj
+            UserResponse.objects.create(user=request.user, quiz=quiz, question=question, selected_choice=ansObj)
     
     return render(request, 'quiz_page.html', {'current_page': current_page, 'question' : question, 'quiz': quiz, 'ans': ans})
 
@@ -66,7 +73,7 @@ class RegistrationView(CreateView):
     model = User
     template_name = 'register_login.html'
     form_class = RegistrationForm
-    success_url = reverse_lazy('register')
+    success_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -83,6 +90,8 @@ class RegistrationView(CreateView):
         send_email = EmailMultiAlternatives("Registration Message", '', to=[user.email])
         send_email.attach_alternative(message, "text/html")
         send_email.send()
+
+        messages.success(self.request, 'Your Registration is Successfull, Check Your Email and Activate Your Account.')
         return super().form_valid(form)
     
 @login_required(login_url="/login/")

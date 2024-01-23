@@ -24,9 +24,9 @@
                     </div>    
                     <input id='timer' type='hidden' name="timer" value="">
                     {% if ans != None and ans.is_correct == True %}
-                    <h6 class="text-success mt-2 text-center"><span class="fs-5 fw-bold">{{ans}}</span> is Correct Answer</h6>
+                    <h6 class="text-success mt-2 text-center"><span class="fs-5 fw-bold">( {{ans}} )</span> is Correct Answer</h6>
                     {% elif ans != None and ans.is_correct == False %}
-                    <h6 class="text-danger mt-2 text-center"><span class="fs-5 fw-bold">{{ans}}</span> is Wrong Answer</h6>
+                    <h6 class="text-danger mt-2 text-center"><span class="fs-5 fw-bold">( {{ans}} )</span> is Wrong Answer</h6>
                     {% endif %}
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-dark btn-sm px-5 mt-3">Submit</button>

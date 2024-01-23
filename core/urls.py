@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import home, quizes, RegistrationView, activate, UserLoginView, UserLogoutView, update_profile, quiz_page
+from .views import home, quizes, quizHistory, RegistrationView, activate, UserLoginView, UserLogoutView, update_profile, quiz_page
 
 urlpatterns = [
     path('', home, name='home'),
     path('quizes/', quizes, name='quizes'),
+    path('quiz/history', quizHistory, name='quiz_history'),
     path('category/<slug:category_slug>/', quizes, name='category_slug_quizes'),
     path('category/<slug:category_slug>/', home, name='category_slug_home'),
     path('register/', RegistrationView.as_view(), name='register'),
