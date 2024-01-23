@@ -5,12 +5,32 @@
 
 <div>
     <div>
-        <img class="w-100" src="{% static "./images/banner.jpg" %}" alt="">
+      <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static "images/banner_1.jpg" %}" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static "images/banner_2.jpg" %}" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static "images/banner_3.jpg" %}" class="d-block w-100" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
     </div>
 </div>
 <section class="container mt-5">
-    <div class="row">
-        <div class="dropdown col-2 mt-3">
+    <div class="d-lg-flex d-sm-block">
+        <div class="dropdown mt-3">
             <button class="btn btn-dark dropdown-toggle px-5" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               Quiz Category
             </button>
@@ -21,8 +41,8 @@
             </ul>
         </div>
         
-        <div class="mb-5 col-10">    
-            <div class="d-flex flex-wrap justify-content-between">
+        <div class="mb-5">    
+            <div class="d-flex flex-wrap justify-content-center">
             {% for quiz in data %}
              
             <a href="{% url "quiz_page" quiz.id %}" style="width:350px;" class="p-3 text-decoration-none">

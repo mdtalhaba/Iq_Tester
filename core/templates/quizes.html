@@ -3,8 +3,8 @@
 {% block content %}
 
 <section class="container mt-5">
-    <div class="row">
-        <div class="dropdown col-2 mt-3">
+    <div class="d-lg-flex d-sm-block">
+        <div class="dropdown mt-3">
             <button class="btn btn-dark dropdown-toggle px-5" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               Quiz Category
             </button>
@@ -15,8 +15,8 @@
             </ul>
         </div>
         
-        <div class="mb-5 col-10">    
-            <div class="d-flex flex-wrap justify-content-between">
+        <div class="mb-5">    
+            <div class="d-flex flex-wrap justify-content-center">
             {% for quiz in data %}
              
             <a href="{% url "quiz_page" quiz.id %}" style="width:350px;" class="p-3 text-decoration-none">
